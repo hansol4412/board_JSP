@@ -1,5 +1,6 @@
 package domain;
 
+
 public class Page {
 	private int pageno; // 현재 페이지 번호
 	private int prev_pageno; // 이전 페이지 번호
@@ -59,3 +60,4 @@ public class Page {
 	
 	
 }
+

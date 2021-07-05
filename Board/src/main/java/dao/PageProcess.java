@@ -3,7 +3,7 @@ package dao;
 import domain.Page;
 
 public class PageProcess {
-	BoardItemDao crud = new BoardDaoItemImpl();
+	BoardItemDao crud = new BoardItemDaoImpl();
 
 	public Integer toInt(String x) {
 		int a = 0;
@@ -14,7 +14,7 @@ public class PageProcess {
 		return a;
 	}
 	
-	public Page pagination(String pagenoP, String criteria, String findWord) {
+	public Page pagination(String pagenoP, String criteria, String findWord, String boardId) {
 		int pageno = toInt(pagenoP);
 
 		if(pageno<1) {// 현재 페이지
@@ -24,9 +24,12 @@ public class PageProcess {
 		int total_record = 0;
 		
 		if(criteria== null || findWord == null) {
-			total_record=crud.getTotalCount(); // 총 레코드 수
+			total_record=crud.getTotalCount(boardId); // 총 레코드 수
+			if(total_record==0) {
+				total_record = 1;
+			}
 		} else {
-			total_record=crud.findTotalCount(criteria, findWord);
+			total_record=crud.findTotalCount(criteria, findWord, boardId);
 			if(total_record==0) {
 				total_record = 1;
 			}

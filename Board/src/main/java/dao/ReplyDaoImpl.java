@@ -16,7 +16,7 @@ public class ReplyDaoImpl implements ReplyDao{
 	
 	public static Connection dbConn() throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.cj.jdbc.Driver"); 
-		Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.23.23:3306/kopo41", "root", "kopo41");
+		Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.23.104:3306/kopo41", "root", "kopo41");
 		return conn;
 	}
 	

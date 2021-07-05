@@ -1,5 +1,6 @@
 package domain;
 
+
 public class BoardItem {
 	private int id;
 	private String title;
@@ -17,12 +18,13 @@ public class BoardItem {
 		this.commentcnt = 0;
 	}
 	
-	public BoardItem(int id, String title, String date, String content, int viewcnt) {
+	public BoardItem(int id, String title, String date, String content, int viewcnt, int boardId) {
 		this.id = id;
 		this.title = title;
 		this.date = date;
 		this.content = content;
 		this.viewcnt = viewcnt;
+		this.boardId = boardId;
 	}
 
 	public int getId() {
@@ -80,8 +82,6 @@ public class BoardItem {
 	public void setBoardId(int boardId) {
 		this.boardId = boardId;
 	}
-	
-	
-	
-	
+		
 }
+
