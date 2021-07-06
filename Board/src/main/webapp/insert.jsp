@@ -17,13 +17,32 @@
 <div class="row-fluid">
     <h1 class="display-2 text-center">Insert</h1>
     <% 
-        Date date = new Date();
+    	String boardId = request.getParameter("boardId");
+    	Date date = new Date();
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         request.setAttribute("date", sd.format(date));
+        request.setAttribute("boardId", boardId);
     %>
 
     <FORM METHOD=POST name='fm'>
         <table class="table">
+        	 <tr>
+                <td width ="100"></td>
+                <td width ="100"><b>게시판</b></td>
+                <td>
+                	<c:choose>
+						<c:when test="${boardId eq 1}">
+							과제게시판<input type=hidden name=boardId value='1'>
+						</c:when>
+						<c:when test="${boardId eq 2}">
+							공지게시판<input type=hidden name=boardId value='2'>
+						</c:when>
+						<c:otherwise>
+							자유게시판<input type=hidden name=boardId value='3'>
+						</c:otherwise>
+					</c:choose>
+				</td>
+            </tr>
             <tr>
                 <td width ="100"></td>
                 <td width ="100"><b>번호</b></td>
@@ -45,7 +64,7 @@
                 <td><textarea style='height: 250px;' name=content class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" ></textarea></td>
         </table>
         <div class="float-end">
-                    <input type=button value="취소" class="btn btn-primary" OnClick="location.href='list.jsp'">
+                    <input type=button value="취소" class="btn btn-primary" OnClick="location.href='list.jsp?boardId=${boardId}'">
                     <input type=button value="쓰기" class="btn btn-primary" OnClick="submitForm('write')">
         </div>
     </FORM>

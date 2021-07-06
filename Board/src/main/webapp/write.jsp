@@ -10,27 +10,29 @@
 <body>
     <%
     String mode = request.getParameter( "key" ); 
-                    String id = request.getParameter( "id" ); 
-                    String title = request.getParameter( "title" ); 
-            	    String titleHan = new String(title.getBytes("8859_1"), "utf-8");
-                    String date = request.getParameter("date"); 
-                    String content = request.getParameter( "content" ); 
-                    String contentHan = new String(content.getBytes("8859_1"), "utf-8");
+                        String id = request.getParameter( "id" ); 
+                        String title = request.getParameter( "title" ); 
+                	    String titleHan = new String(title.getBytes("8859_1"), "utf-8");
+                        String date = request.getParameter("date"); 
+                        String content = request.getParameter( "content" ); 
+                        String contentHan = new String(content.getBytes("8859_1"), "utf-8");
+                        String boardId = request.getParameter( "boardId" ); 
 
-                	BoardItemDao crud = new BoardDaoItemImpl();	
-               	 	BoardItem board = new BoardItem(Integer.parseInt(id), titleHan ,date ,contentHan, 0);
-                
-                	if(mode.equals("INSERT")){
-                       	crud.insert(board);
+                    	BoardItemDao crud = new BoardItemDaoImpl();	
+                   	 	BoardItem board = new BoardItem(Integer.parseInt(id), titleHan ,date ,contentHan, 0, Integer.parseInt(boardId));
+                    
+                    	if(mode.equals("INSERT")){
+                           	crud.insert(board);
 
-                    } else if(mode.equals("UPDATE")){
-            	crud.update(board);
+                        } else if(mode.equals("UPDATE")){
+                	crud.update(board);
 
-                    } else if(mode.equals("DELETE")){
+                        } else if(mode.equals("DELETE")){
 
-                    	crud.delete(board);
-                    }
+                        	crud.delete(board);
+                        }
+      request.setAttribute("board", board);
     %>
-    <c:redirect url="list.jsp" />
+    <c:redirect url="list.jsp?boardId=${board.boardId}" />
 </body>
 </html>

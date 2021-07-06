@@ -50,24 +50,41 @@
 <body>
     <%
     int bno = Integer.parseInt(request.getParameter( "key" ));
-            	    BoardItemDao crud = new BoardDaoItemImpl();
-            	    BoardItem board = crud.read(bno);
-            	    ReplyDao replyCrud = new ReplyDaoImpl();
-            	    List<Reply> replyList = replyCrud.getList(bno);
-            	    
-            	    int cnt = board.getViewcnt(); //조회수 증가
-                    crud.viewCnt(board.getId(), cnt);
-            	    
-                    String replyId = null;
-                    replyId = replyCrud.getLastReplyId(board.getId()) +"";
+                	    BoardItemDao crud = new BoardItemDaoImpl();
+                	    BoardItem board = crud.read(bno);
+                	    ReplyDao replyCrud = new ReplyDaoImpl();
+                	    List<Reply> replyList = replyCrud.getList(bno);
+                	    
+                	    int cnt = board.getViewcnt(); //조회수 증가
+                        crud.viewCnt(board.getId(), cnt);
+                	    
+                        String replyId = null;
+                        replyId = replyCrud.getLastReplyId(board.getId()) +"";
 
-            	    request.setAttribute("board", board);
-            	    request.setAttribute("bno", bno);
-            	    request.setAttribute("replyList", replyList);
-            	    request.setAttribute("replyId", replyId);
+                	    request.setAttribute("board", board);
+                	    request.setAttribute("bno", bno);
+                	    request.setAttribute("replyList", replyList);
+                	    request.setAttribute("replyId", replyId);
     %>
 			<h1 class="display-2 text-center">View</h1>
             <table class="table">
+                    <tr>
+                    <td><b>게시판</b></td>
+                    <td>
+                    <c:choose>
+						<c:when test="${board.boardId eq 1}">
+							과제게시판
+						</c:when>
+						<c:when test="${board.boardId eq 2}">
+							공지게시판
+						</c:when>
+						<c:otherwise>
+							자유게시판
+						</c:otherwise>
+					</c:choose>
+					</td>
+                    </tr>
+                    
                     <tr>
                     <td><b>번호</b></td>
                     <td>${board.id}</td>
@@ -122,7 +139,7 @@
         </table>
         <table width=650>
             <td width=600></td>
-            <td><input type=button value="목록"  class="btn btn-primary" OnClick="location.href='list.jsp'"></td>
+            <td><input type=button value="목록"  class="btn btn-primary" OnClick="location.href='list.jsp?boardId=${board.boardId}'"></td>
             <td><input type=button value='수정'  class='btn btn-primary' OnClick=location.href='update.jsp?key=${bno}'></td>
         </table>
     </div>

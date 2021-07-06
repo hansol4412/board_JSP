@@ -36,50 +36,52 @@
     <h1 class="display-2 text-center"><a href='list.jsp' id='noBlue'>Board</a></h1>
     <%
     Date date = new Date();
-                    SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-                    
-                    String criteria = request.getParameter( "criteria" );
-                    String find = request.getParameter("find");
-                    
-                    String pageno = request.getParameter("pageno");
-                    PageProcess pp = new PageProcess();
-                    Page pageParameter = pp.pagination(pageno, criteria, find);
-                    
-                    BoardItemDao crud = new BoardDaoItemImpl();
-                	ReplyDao crudR = new ReplyDaoImpl();
-                	
-                	List<BoardItem> boardList;
-                	if(criteria == null || find == null){
-                		boardList = crud.getListWithPaging(pageno);
-                	} else{
-                		boardList = crud.findListWithPaging(pageno, criteria, find);
-                	}
-                	
-                	for(BoardItem board: boardList) {
-                		board.setCommentcnt(crudR.getTotalCount(board.getId()));
-                	}
-                	
-                	
-                    request.setAttribute("boardList", boardList);
-                    request.setAttribute("date", sd.format(date));
-                    request.setAttribute("criteria", criteria);
-                    request.setAttribute("find", find);
-                    request.setAttribute("pageParameter", pageParameter);
-                    request.setAttribute("Itemtotalcount", crud.getTotalCount());
+                        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+                        
+                        String criteria = request.getParameter( "criteria" );
+                        String find = request.getParameter("find");
+                        String boardId = request.getParameter("boardId");
+                        
+                        String pageno = request.getParameter("pageno");
+                        PageProcess pp = new PageProcess();
+                        Page pageParameter = pp.pagination(pageno, criteria, find, boardId);
+                        
+                        BoardItemDao crud = new BoardItemDaoImpl();
+                    	ReplyDao crudR = new ReplyDaoImpl();
+                    	
+                    	List<BoardItem> boardList;
+                    	if(criteria == null || find == null){
+                    		boardList = crud.getListWithPaging(pageno, boardId);
+                    	} else{
+                    		boardList = crud.findListWithPaging(pageno, criteria, find, boardId);
+                    	}
+                    	
+                    	for(BoardItem board: boardList) {
+                    		board.setCommentcnt(crudR.getTotalCount(board.getId()));
+                    	}
+                    	
+                    	
+                        request.setAttribute("boardList", boardList);
+                        request.setAttribute("date", sd.format(date));
+                        request.setAttribute("criteria", criteria);
+                        request.setAttribute("find", find);
+                        request.setAttribute("pageParameter", pageParameter);
+                        request.setAttribute("Itemtotalcount", crud.getTotalCount(boardId));
+                        request.setAttribute("boardId", boardId);
     %>
 
-    	
-    	
-       
         <ul class="nav nav-tabs">
+        	<li class="nav-item active">
+	            <a class="nav-link" href="main.jsp">HOME</a>
+	        </li>
 	        <li class="nav-item active">
-	            <a class="nav-link" href="home.jsp">과제게시판</a>
+	            <a class="nav-link" href="list.jsp?boardId=1">과제게시판</a>
 	        </li>
 	        <li class="nav-item ">
-	            <a class="nav-link" href="news.jsp">공지게시판</a>
+	            <a class="nav-link" href="list.jsp?boardId=2">공지게시판</a>
 	        </li>
 	        <li class="nav-item">
-	            <a class="nav-link" href="gongji.jsp">자유게시판</a>
+	            <a class="nav-link" href="list.jsp?boardId=3">자유게시판</a>
 	        </li>
     	</ul>
         <br><br>
@@ -138,7 +140,8 @@
                     </select>
                     </div class="col-12">
                     <div>
-                    <input type=text name="find" id ='findc' class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"> 
+                    <input type=text name="find" id ='findc' class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                    <input type=hidden name="boardId" value=${boardId}> 
                     </div>
                     <div class="col-12">
                     <button class="btn btn-primary" OnClick ="findContent()">찾기 </button>
@@ -146,43 +149,43 @@
                 <form>
                 
                  <div class="float-end">
-                    <input type=button  class="btn btn-success" value=" 신규" OnClick="window.location='insert.jsp'">
+                    <input type=button  class="btn btn-success" value=" 신규" OnClick="window.location='insert.jsp?boardId=${boardId}'">
        			 </div>
     </div>
     			
     			<c:set var="pageno" value="${pageParameter.pageno}" />
     			<c:choose> 
 					<c:when test="${empty criteria || empty find}">
-						<a href='list.jsp?pageno=1' class='btn btn-outline-primary'>&lt;&lt;</a>
-    					<a href='list.jsp?pageno=${pageParameter.prev_pageno}' class='btn btn-outline-primary'>&lt;</a>
+						<a href='list.jsp?pageno=1&boardId=${boardId}' class='btn btn-outline-primary'>&lt;&lt;</a>
+    					<a href='list.jsp?pageno=${pageParameter.prev_pageno}&boardId=${boardId}' class='btn btn-outline-primary'>&lt;</a>
 				        <c:forEach var="i" begin="${pageParameter.page_sno}" end="${pageParameter.page_eno}">
 							<c:choose>
 								<c:when test="${pageno eq i}">
-									<a class='btn btn-primary' href='list.jsp?pageno=${i}'>${i}</a>
+									<a class='btn btn-primary' href='list.jsp?pageno=${i}&boardId=${boardId}'>${i}</a>
 								</c:when>
 								<c:otherwise>
-									<a class='btn btn-outline-primary' href='list.jsp?pageno=${i}'>${i}</a>
+									<a class='btn btn-outline-primary' href='list.jsp?pageno=${i}&boardId=${boardId}'>${i}</a>
 								</c:otherwise>
 							</c:choose>
 				        </c:forEach>
-				        <a href='list.jsp?pageno=${pageParameter.next_pageno}' class='btn btn-outline-primary' >&gt;</a>
-    					<a href='list.jsp?pageno=${Itemtotalcount}' class='btn btn-outline-primary'>&gt;&gt;</a>
+				        <a href='list.jsp?pageno=${pageParameter.next_pageno}&boardId=${boardId}' class='btn btn-outline-primary' >&gt;</a>
+    					<a href='list.jsp?pageno=${Itemtotalcount}&boardId=${boardId}' class='btn btn-outline-primary'>&gt;&gt;</a>
 					</c:when> 
 					<c:otherwise>
-						<a href='list.jsp?pageno=1&criteria=${criteria}&find=${find}' class='btn btn-outline-primary'>&lt;&lt;</a>
-    					<a href='list.jsp?pageno=${pageParameter.prev_pageno}&criteria=${criteria}&find=${find}' class='btn btn-outline-primary'>&lt;</a>
+						<a href='list.jsp?pageno=1&criteria=${criteria}&find=${find}&boardId=${boardId}' class='btn btn-outline-primary'>&lt;&lt;</a>
+    					<a href='list.jsp?pageno=${pageParameter.prev_pageno}&criteria=${criteria}&find=${find}&boardId=${boardId}' class='btn btn-outline-primary'>&lt;</a>
 				        <c:forEach var="i" begin="${pageParameter.page_sno}" end="${pageParameter.page_eno}">
 							<c:choose>
 								<c:when test="${pageno eq i}">
-									<a class='btn btn-primary' href='list.jsp?pageno=${i}&criteria=${criteria}&find=${find}'>${i}</a>
+									<a class='btn btn-primary' href='list.jsp?pageno=${i}&criteria=${criteria}&find=${find}&boardId=${boardId}'>${i}</a>
 								</c:when>
 								<c:otherwise>
-									<a class='btn btn-outline-primary' href='list.jsp?pageno=${i}&criteria=${criteria}&find=${find}'>${i}</a>
+									<a class='btn btn-outline-primary' href='list.jsp?pageno=${i}&criteria=${criteria}&find=${find}&boardId=${boardId}'>${i}</a>
 								</c:otherwise>
 							</c:choose>
 				        </c:forEach>
-				        <a href='list.jsp?pageno=${pageParameter.next_pageno}&criteria=${criteria}&find=${find}' class='btn btn-outline-primary' >&gt;</a>
-    					<a href='list.jsp?pageno=${Itemtotalcount}&criteria=${criteria}&find=${find}' class='btn btn-outline-primary'>&gt;&gt;</a>
+				        <a href='list.jsp?pageno=${pageParameter.next_pageno}&criteria=${criteria}&find=${find}&boardId=${boardId}' class='btn btn-outline-primary' >&gt;</a>
+    					<a href='list.jsp?pageno=${Itemtotalcount}&criteria=${criteria}&find=${find}&boardId=${boardId}' class='btn btn-outline-primary'>&gt;&gt;</a>
 					</c:otherwise> 
 				</c:choose>
 

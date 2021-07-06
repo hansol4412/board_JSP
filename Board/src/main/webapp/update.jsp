@@ -23,15 +23,30 @@
     <div class="row-fluid">
     <%
     int bno = Integer.parseInt(request.getParameter( "key" ));
-            	    BoardItemDao crud = new BoardDaoItemImpl();
-            	    BoardItem board = crud.read(bno);
-            	    
-            	    request.setAttribute("board", board);
+                	    BoardItemDao crud = new BoardItemDaoImpl();
+                	    BoardItem board = crud.read(bno);
+                	    
+                	    request.setAttribute("board", board);
     %>
     
     <h1 class="display-2 text-center">Update</h1><br>
     <FORM METHOD=POST name='fm'>
         <table class="table">
+        	<tr><td><b>게시판</b></td>
+            <td>
+            	<c:choose>
+						<c:when test="${boardId eq 1}">
+							과제게시판<input type='hidden' name='boardId' value=${board.boardId} readonly>
+						</c:when>
+						<c:when test="${boardId eq 2}">
+							공지게시판<input type='hidden' name='boardId'  value=${board.boardId} readonly>
+						</c:when>
+						<c:otherwise>
+							자유게시판<input type='hidden' name='boardId'  value=${board.boardId} readonly>
+						</c:otherwise>
+				</c:choose>
+            </td>
+            </tr>
         	<tr><td><b>번호</b></td>
             <td><input type='text' name='id' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm' value=${board.id} readonly></td>
             </tr>
@@ -46,7 +61,7 @@
             </tr>
         </table>
         <div class="float-end">
-                   <input type=button value="취소" class="btn btn-primary btn-sm" OnClick="location.href='list.jsp'">
+                   <input type=button value="취소" class="btn btn-primary btn-sm" OnClick="location.href='list.jsp?boardId=${board.boardId}'">
                    <input type=button value="수정" class="btn btn-secondary btn-sm" OnClick="submitForm('update')">
                    <input type=button value="삭제" class="btn btn-warning btn-sm" OnClick="submitForm('delete')">
         </div>
