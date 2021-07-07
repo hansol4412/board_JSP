@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domain.BoardItem;
-import domain.Page;
 
 public class BoardItemDaoImpl implements BoardItemDao {
 	
@@ -44,13 +43,9 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	@Override
 	public List<BoardItem> getListWithPaging(String pageno, String boardId){
 		List<BoardItem> boardList = new ArrayList<BoardItem>();
-		
-		PageProcess pp = new PageProcess();
-		Page pageProcess = pp.pagination(pageno, null, null, boardId);
-
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem where boardId = "+boardId+" order by id desc limit "+((pageProcess.getPageno()-1)*10)+", 10;");
+			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem where boardId = "+boardId+" order by id desc limit "+pageno+", 10;");
 			while (rset.next()) {
 				BoardItem board = new BoardItem(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getInt(5), rset.getInt(6));
 				boardList.add(board);
@@ -70,12 +65,10 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	@Override
 	public List<BoardItem> findListWithPaging(String pageno, String criteria, String findWord, String boardId) {
 		List<BoardItem> boardList = new ArrayList<BoardItem>();
-		PageProcess pp = new PageProcess();
-		Page pageProcess = pp.pagination(pageno, criteria, findWord, boardId);
-
+		
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem where boardId = "+boardId+" and "+criteria+" like '%"+findWord+"%' order by id desc limit "+((pageProcess.getPageno()-1)*10)+", 10;");
+			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem where boardId = "+boardId+" and "+criteria+" like '%"+findWord+"%' order by id desc limit "+pageno+", 10;");
 			while (rset.next()) {
 				BoardItem board = new BoardItem(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getInt(5), rset.getInt(6));
 				boardList.add(board);
@@ -191,7 +184,6 @@ public class BoardItemDaoImpl implements BoardItemDao {
 			if(rset.next()) {
 				totalcount = rset.getInt(1); 
 			}
-			//System.out.println(totalcount);
 			rset.close();
 			stmt.close();
 		} catch(ClassNotFoundException e) {
@@ -207,7 +199,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	public void viewCnt(int bno, int viewCnt) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql = "update boardItem set viewcnt="+(viewCnt+1)+" where id="+bno+";";
+			String sql = "update boardItem set viewcnt="+(viewCnt)+" where id="+bno+";";
 	        stmt.executeUpdate( sql );
 			stmt.close();
 			dbConn().close(); 

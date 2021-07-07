@@ -26,11 +26,13 @@ public class ReplyDaoImpl implements ReplyDao{
 
 		try {
 			Statement stmt = dbConn().createStatement();
+			
 			ResultSet rset = stmt.executeQuery("select * from reply where boardItemId="+bno+";");
 			while (rset.next()) {
 				Reply reply = new Reply(rset.getInt(1), rset.getInt(2), rset.getString(3), rset.getString(4));
 				replyList.add(reply);
 			}
+			
 			rset.close();
 			stmt.close();
 			dbConn().close(); 
@@ -69,7 +71,6 @@ public class ReplyDaoImpl implements ReplyDao{
 	        stmt.execute(sql); 
 			stmt.close();
 			dbConn().close(); 
-
 		} catch(ClassNotFoundException e) {
 			e.getStackTrace();
 		} catch (SQLException e) {
