@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.sql.*, javax.sql.*, java.net.*, java.io.*, java.text.*, java.util.Date" %>
-<%@ page import="domain.*, dao.*" %>
+<%@ page import="domain.*, service.*" %>
 <html>
 <head>
 
@@ -18,7 +18,7 @@
                         String contentHan = new String(content.getBytes("8859_1"), "utf-8");
                         String boardId = request.getParameter( "boardId" ); 
 
-                    	BoardItemDao crud = new BoardItemDaoImpl();	
+                    	BoardItemService crud = new BoardItemServiceImpl();	
                    	 	BoardItem board = new BoardItem(Integer.parseInt(id), titleHan ,date ,contentHan, 0, Integer.parseInt(boardId));
                     
                     	if(mode.equals("INSERT")){

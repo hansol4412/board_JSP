@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.sql.*, javax.sql.*, java.net.*, java.io.*,java.text.*, java.util.Date, java.util.List" %>
-<%@ page import="domain.*, dao.*" %>
+<%@ page import="domain.*, service.* " %>
 <html>
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -33,7 +33,6 @@
 <body>
     <div class="container">
     <div class="row-fluid">
-    <h1 class="display-2 text-center"><a href='list.jsp' id='noBlue'>Board</a></h1>
     <%
     Date date = new Date();
                         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
@@ -43,11 +42,11 @@
                         String boardId = request.getParameter("boardId");
                         
                         String pageno = request.getParameter("pageno");
-                        PageProcess pp = new PageProcess();
-                        Page pageParameter = pp.pagination(pageno, criteria, find, boardId);
                         
-                        BoardItemDao crud = new BoardItemDaoImpl();
-                    	ReplyDao crudR = new ReplyDaoImpl();
+                        BoardItemService crud = new BoardItemServiceImpl();
+                    	ReplyService crudR = new ReplyServiceImpl();
+
+                        Page pageParameter = crud.pagination(pageno, criteria, find, boardId);
                     	
                     	List<BoardItem> boardList;
                     	if(criteria == null || find == null){
@@ -69,7 +68,8 @@
                         request.setAttribute("Itemtotalcount", crud.getTotalCount(boardId));
                         request.setAttribute("boardId", boardId);
     %>
-
+    
+		<h1 class="display-2 text-center">Board</h1>
         <ul class="nav nav-tabs">
         	<li class="nav-item active">
 	            <a class="nav-link" href="main.jsp">HOME</a>
