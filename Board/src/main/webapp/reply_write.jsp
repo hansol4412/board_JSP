@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.sql.*, javax.sql.*, java.net.*, java.io.*,java.text.*, java.util.Date" %>
-<%@ page import="domain.*, dao.*" %>
+<%@ page import="domain.*, service.*" %>
 <html>
 <head> 
 </head>
@@ -20,15 +20,15 @@
         String replyContent = request.getParameter( "replyContent" ); 
 	    String replyContentHan = new String(replyContent.getBytes("8859_1"), "utf-8");
 	    
-	    ReplyDao crud = new ReplyDaoImpl();	
+	    ReplyService crudR = new ReplyServiceImpl();
 	    Reply reply = new Reply(Integer.parseInt(gongjiId), Integer.parseInt(replyId) ,replyContentHan);
 	    
         if(mode.equals("insert")){
-            crud.insert(reply);
+        	crudR.insert(reply);
         } else if(mode.equals("update")){
-            crud.update(reply);
+        	crudR.update(reply);
         } else if(mode.equals("delete")){
-            crud.delete(reply);
+        	crudR.delete(reply);
         }
 
         request.setAttribute("gongjiId", gongjiId);

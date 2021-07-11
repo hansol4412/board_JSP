@@ -16,7 +16,7 @@
 <body>
 	<div class="container">
 	<div class="row-fluid">
-	<h1 class="display-2 text-center"><a href='list.jsp' id='noBlue'>HOME</a></h1>
+	<h1 class="display-2 text-center">HOME</h1>
 	    <ul class="nav nav-tabs">
 	    	<li class="nav-item active">
 	            <a class="nav-link" href="main.jsp">HOME</a>

@@ -3,7 +3,7 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.sql.*, javax.sql.*, java.net.*, java.io.* ,java.util.List" %>
-<%@ page import="domain.*, dao.*" %>
+<%@ page import="domain.*, service.*" %>
 <html>
 <head> 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
@@ -50,16 +50,16 @@
 <body>
     <%
     int bno = Integer.parseInt(request.getParameter( "key" ));
-                	    BoardItemDao crud = new BoardItemDaoImpl();
+                	    BoardItemService crud = new BoardItemServiceImpl();
                 	    BoardItem board = crud.read(bno);
-                	    ReplyDao replyCrud = new ReplyDaoImpl();
-                	    List<Reply> replyList = replyCrud.getList(bno);
+                	    ReplyService crudR = new ReplyServiceImpl();
+                	    List<Reply> replyList = crudR.getList(bno);
                 	    
                 	    int cnt = board.getViewcnt(); //조회수 증가
                         crud.viewCnt(board.getId(), cnt);
                 	    
                         String replyId = null;
-                        replyId = replyCrud.getLastReplyId(board.getId()) +"";
+                        replyId = crudR.getLastReplyId(board.getId()) +"";
 
                 	    request.setAttribute("board", board);
                 	    request.setAttribute("bno", bno);
