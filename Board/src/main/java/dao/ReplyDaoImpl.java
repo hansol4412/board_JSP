@@ -27,7 +27,7 @@ public class ReplyDaoImpl implements ReplyDao{
 		try {
 			Statement stmt = dbConn().createStatement();
 			
-			ResultSet rset = stmt.executeQuery("select * from reply where boardItemId="+bno+";");
+			ResultSet rset = stmt.executeQuery("select * from replyJSP where boardItemId="+bno+";");
 			while (rset.next()) {
 				Reply reply = new Reply(rset.getInt(1), rset.getInt(2), rset.getString(3), rset.getString(4));
 				replyList.add(reply);
@@ -48,7 +48,7 @@ public class ReplyDaoImpl implements ReplyDao{
 	public void insert(Reply reply) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql="insert into reply(boardItemId ,replyId, date, content) values("+reply.getBoardItemId()+","+reply.getReplyId()+", date(now()), '"+reply.getContent()+"')";
+			String sql="insert into replyJSP(boardItemId ,replyId, date, content) values("+reply.getBoardItemId()+","+reply.getReplyId()+", date(now()), '"+reply.getContent()+"')";
 	        stmt.execute(sql); 
 			stmt.close();
 			dbConn().close(); 
@@ -67,7 +67,7 @@ public class ReplyDaoImpl implements ReplyDao{
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql = "update reply set date ='"+sd.format(date)+"', content='"+reply.getContent()+"' where boardItemId= "+reply.getBoardItemId()+" and replyId= "+reply.getReplyId()+";";
+			String sql = "update replyJSP set date ='"+sd.format(date)+"', content='"+reply.getContent()+"' where boardItemId= "+reply.getBoardItemId()+" and replyId= "+reply.getReplyId()+";";
 	        stmt.execute(sql); 
 			stmt.close();
 			dbConn().close(); 
@@ -83,7 +83,7 @@ public class ReplyDaoImpl implements ReplyDao{
 	public void delete(Reply reply) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql="delete from reply where boardItemId="+reply.getBoardItemId()+" and replyId= "+reply.getReplyId()+";";
+			String sql="delete from replyJSP where boardItemId="+reply.getBoardItemId()+" and replyId= "+reply.getReplyId()+";";
 	        stmt.execute(sql); 
 			stmt.close();
 			dbConn().close(); 
@@ -101,7 +101,7 @@ public class ReplyDaoImpl implements ReplyDao{
 		int totalcount=0;
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select count(*) from reply where boardItemId="+bno+";");
+			ResultSet rset = stmt.executeQuery("select count(*) from replyJSP where boardItemId="+bno+";");
 			if(rset.next()) {
 				totalcount = rset.getInt(1);   
 			}
@@ -123,7 +123,7 @@ public class ReplyDaoImpl implements ReplyDao{
 		int LastReplyId=0;
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select replyId from reply where boardItemId = "+bno+" order by replyId desc limit 1;");
+			ResultSet rset = stmt.executeQuery("select replyId from replyJSP where boardItemId = "+bno+" order by replyId desc limit 1;");
 			if(rset.next()) {
 				LastReplyId = rset.getInt(1);   
 			}

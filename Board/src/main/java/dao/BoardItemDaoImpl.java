@@ -23,7 +23,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 		List<BoardItem> boardList = new ArrayList<BoardItem>();
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem order by id desc;");
+			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItemJSP order by id desc;");
 			while (rset.next()) {
 				BoardItem board = new BoardItem(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getInt(5), rset.getInt(6));
 				boardList.add(board);
@@ -45,7 +45,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 		List<BoardItem> boardList = new ArrayList<BoardItem>();
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem where boardId = "+boardId+" order by id desc limit "+pageno+", 10;");
+			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItemJSP where boardId = "+boardId+" order by id desc limit "+pageno+", 10;");
 			while (rset.next()) {
 				BoardItem board = new BoardItem(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getInt(5), rset.getInt(6));
 				boardList.add(board);
@@ -68,7 +68,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 		
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItem where boardId = "+boardId+" and "+criteria+" like '%"+findWord+"%' order by id desc limit "+pageno+", 10;");
+			ResultSet rset = stmt.executeQuery("select id, title, date, content, viewcnt, boardId from boardItemJSP where boardId = "+boardId+" and "+criteria+" like '%"+findWord+"%' order by id desc limit "+pageno+", 10;");
 			while (rset.next()) {
 				BoardItem board = new BoardItem(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getInt(5), rset.getInt(6));
 				boardList.add(board);
@@ -90,7 +90,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 		BoardItem board = null;
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select * from boardItem where id="+bno+";");
+			ResultSet rset = stmt.executeQuery("select * from boardItemJSP where id="+bno+";");
 			if (rset.next()) {
 				board = new BoardItem(rset.getInt(1), rset.getString(2), rset.getString(3), rset.getString(4), rset.getInt(5), rset.getInt(6));
 			}
@@ -110,7 +110,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	public void insert(BoardItem board) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql="insert into boardItem(title, date, content, viewcnt, boardId) values('"+board.getTitle()+"', '"+board.getDate()+"', '"+board.getContent()+"',0,"+board.getBoardId()+")";
+			String sql="insert into boardItemJSP(title, date, content, viewcnt, boardId) values('"+board.getTitle()+"', '"+board.getDate()+"', '"+board.getContent()+"',0,"+board.getBoardId()+")";
 	        stmt.execute(sql); 
 			stmt.close();
 			dbConn().close(); 
@@ -126,7 +126,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	public void update(BoardItem board) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql = "update boardItem set title='"+board.getTitle()+"', date ='"+board.getDate()+"', content='"+board.getContent()+"' where id="+board.getId()+";";
+			String sql = "update boardItemJSP set title='"+board.getTitle()+"', date ='"+board.getDate()+"', content='"+board.getContent()+"' where id="+board.getId()+";";
 	        stmt.executeUpdate( sql );
 			stmt.close();
 			dbConn().close(); 
@@ -141,7 +141,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	public void delete(BoardItem board) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql="delete from boardItem where id = " + board.getId();
+			String sql="delete from boardItemJSP where id = " + board.getId();
 	        stmt.executeUpdate( sql ); 
 			stmt.close();
 			dbConn().close(); 
@@ -158,7 +158,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 		int totalcount=0;
 			try {
 				Statement stmt = dbConn().createStatement();
-				ResultSet rset = stmt.executeQuery("select count(*) from boardItem where boardId = "+boardId+";");
+				ResultSet rset = stmt.executeQuery("select count(*) from boardItemJSP where boardId = "+boardId+";");
 				if(rset.next()) {
 					totalcount = rset.getInt(1);   
 				}
@@ -180,7 +180,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 		int totalcount=0;
 		try {
 			Statement stmt = dbConn().createStatement();
-			ResultSet rset = stmt.executeQuery("select count(*) from boardItem where boardId = "+boardId+" and "+criteria+" like '%"+findWord+"%' order by id desc;");
+			ResultSet rset = stmt.executeQuery("select count(*) from boardItemJSP where boardId = "+boardId+" and "+criteria+" like '%"+findWord+"%' order by id desc;");
 			if(rset.next()) {
 				totalcount = rset.getInt(1); 
 			}
@@ -199,7 +199,7 @@ public class BoardItemDaoImpl implements BoardItemDao {
 	public void viewCnt(int bno, int viewCnt) {
 		try {
 			Statement stmt = dbConn().createStatement();
-			String sql = "update boardItem set viewcnt="+(viewCnt)+" where id="+bno+";";
+			String sql = "update boardItemJSP set viewcnt="+(viewCnt)+" where id="+bno+";";
 	        stmt.executeUpdate( sql );
 			stmt.close();
 			dbConn().close(); 
